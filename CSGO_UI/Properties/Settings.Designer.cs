@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CSGOServerUI.Properties
+namespace CSGO_UI.Properties
 {
 
 
