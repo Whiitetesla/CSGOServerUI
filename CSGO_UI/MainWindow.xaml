@@ -7,7 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <TextBox Margin="10,10,119,282" IsEnabled="True"/>
-        <Button Margin="403,10,10,282">SteamCMD folder</Button>
+        <TextBox x:Name="temp_out" Margin="0,216,0,20"></TextBox>
+        
+        <TextBox x:Name="SteamCMDName"  Margin="10,10,119,282" IsEnabled="False"></TextBox>
+            <Button x:Name="SteamCMDButt" Margin="403,10,10,282" Click="Button_Click">SteamCMD folder</Button>
+        <ComboBox x:Name="CSMaps" Margin="403,76,10,215" Initialized="CSMaps_Initialized" GotFocus="CSMaps_GotFocus">
+        </ComboBox>
+        <TextBox x:Name="NumberOfPlayers" Margin="467,147,10,145" PreviewTextInput="NumberOfPlayers_OnPreviewTextInput" Initialized="NumberOfPlayers_Initialized" TextChanged="NumberOfPlayers_TextChanged"></TextBox>
+        <Button x:Name="updateButt" Margin="10,147,394,145" Click="Button_Click_1">Update</Button>
+        
     </Grid>
 </Window>
