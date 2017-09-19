@@ -208,7 +208,7 @@ namespace CSGO_UI
             }
             catch (Exception exception)
             {
-                //temp_out.Text = "error when trying to start the server";
+                temp_out.Text = "error when trying to start the server";
 
             }
         }
