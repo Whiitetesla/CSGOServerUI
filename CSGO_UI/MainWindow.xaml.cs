@@ -31,6 +31,7 @@ namespace CSGO_UI
         public int MaxPlayers { get; set; } = 10;
         public DateTime LastUpdated { get; set; } = DateTime.Now;
 
+        public ObservableCollection<string> GameModes { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Maps { get; set; } = new ObservableCollection<string>();
         
 
@@ -39,26 +40,60 @@ namespace CSGO_UI
             InitializeComponent();
             UpdateClient();
 
-            setMaps();
-            MapCode = GetModes(Maps.First());
+            setMapsAndModes();
+            MapCode = GetMapCodes(Maps.First());
+            GameMode = GetModeCode(GameModes.First());
         }
 
-        private void setMaps()
+        private void setMapsAndModes()
         {
             Maps.Add("Dust 2");
             Maps.Add("Dust");
             Maps.Add("Nuke");
 
+            GameModes.Add("Cassic Competitive");
+            GameModes.Add("Cassic Casual");
+            GameModes.Add("Arms Race");
+            GameModes.Add("Demolition");
+            GameModes.Add("Deathmatch");
+
+        }
+
+        public string GetModeCode(string mode)
+        {
+            string temp = "+game_type ";
+            switch (mode)
+            {
+                case "Cassic Competitive":
+                    temp += "0 +game_mode 1 ";
+                    break;
+                case "Cassic Casual":
+                    temp += "0 +game_mode 0 ";
+                    break;
+                case "Arms Race":
+                    temp += "1 +game_mode 0 ";
+                    break;
+                case "Demolition":
+                    temp += "1 +game_mode 1 ";
+                    break;
+                case "Deathmatch":
+                    temp += "1 +game_mode 2 ";
+                    break;
+                default:
+                    temp += "0 +game_mode 1 ";
+                    break;
+            }
+            return temp;
         }
 
         //creates a string for the given gamemode
-        public string GetModes(string mode)
+        public string GetMapCodes(string map)
         {
-            string temp = "+map";
-            switch (mode)
+            string temp = "+map ";
+            switch (map)
             {
                 case "Dust 2":
-                    temp += "+de_dust2";
+                    temp += "de_dust2";
                     break;
                 case "Dust":
                     temp += "de_dust";
@@ -75,7 +110,7 @@ namespace CSGO_UI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
+           OpenFileDialog fileDialog = new OpenFileDialog();
 
             fileDialog.Filter = "Programer (.exe)|*.exe|Alle filer (*.*)|*.*";
 
@@ -114,11 +149,6 @@ namespace CSGO_UI
             CSMaps.SelectedIndex = 0;
         }
 
-        private void CSMaps_GotFocus(object sender, RoutedEventArgs e)
-        {
-            MapCode = GetModes(CSMaps.SelectionBoxItem.ToString());
-        }
-
         private void NumberOfPlayers_Initialized(object sender, EventArgs e)
         {
             NumberOfPlayers.Text = MaxPlayers.ToString();
@@ -149,14 +179,15 @@ namespace CSGO_UI
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
-                throw;
+                temp_out.Text = "error with the Steam cmd Please check if you entered the right path";
             }
         }
 
         private void StartClient()
         {
             Process CSStart = new Process();
+            string serverString = "srcds -game csgo -console -usercon " + GameMode + "+mapgroup mg_active " + MapCode;
+            temp_out.Text = serverString;
             try
             {
                 CSStart.StartInfo.FileName = SteamCdmPath + "\\steamapps\\common\\ARK Survival Evolved Dedicated Server\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe";
@@ -168,13 +199,17 @@ namespace CSGO_UI
                 {
                     CSStart.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                 }
-                CSStart.StartInfo.Arguments = "srcds -game csgo -usercon +game_type 0 +game_mode 0 + mapgrout mg_active + map de_dust2";
-                CSStart.Start();
+                CSStart.StartInfo.Arguments = serverString;
+
+                if (CSStart.Start())
+                {
+                    temp_out.Text = "server started";
+                }
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
-                throw;
+                //temp_out.Text = "error when trying to start the server";
+
             }
         }
 
@@ -184,14 +219,17 @@ namespace CSGO_UI
             try
             {
                 CSStop.StartInfo.FileName = "cmd.exe";
-                CSStop.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                CSStop.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 CSStop.StartInfo.Arguments = "cmd.exe" + String.Format("/k {0} & {1}", "TASKKILL /IM srcds.exe", "exit");
-                CSStop.Start();
+                if (CSStop.Start())
+                {
+                    temp_out.Text = "server stopped";
+                }
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
-                throw;
+                temp_out.Text = "error when trying to stop the server";
+
             }
         }
 
@@ -203,6 +241,22 @@ namespace CSGO_UI
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             StopClient();
+        }
+
+        private void gameModes_Initialized(object sender, EventArgs e)
+        {
+            gameModes.ItemsSource = GameModes;
+            gameModes.SelectedIndex = 0;
+        }
+
+        private void CSMaps_LostFocus(object sender, RoutedEventArgs e)
+        {
+            MapCode = GetMapCodes(CSMaps.SelectionBoxItem.ToString());
+        }
+
+        private void gameModes_LostFocus(object sender, RoutedEventArgs e)
+        {
+            GameMode = GetModeCode(gameModes.SelectionBoxItem.ToString());
         }
     }
 }

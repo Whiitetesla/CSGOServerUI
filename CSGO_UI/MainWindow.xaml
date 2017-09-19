@@ -11,12 +11,12 @@
         
         <TextBox x:Name="SteamCMDName"  Margin="10,10,119,282" IsEnabled="False"></TextBox>
             <Button x:Name="SteamCMDButt" Margin="403,10,10,282" Click="Button_Click">SteamCMD folder</Button>
-        <ComboBox x:Name="CSMaps" Margin="403,76,10,215" Initialized="CSMaps_Initialized" GotFocus="CSMaps_GotFocus">
-        </ComboBox>
+        <ComboBox x:Name="CSMaps" Margin="403,76,10,215" Initialized="CSMaps_Initialized" LostFocus="CSMaps_LostFocus"/>
         <TextBox x:Name="NumberOfPlayers" Margin="467,147,10,145" PreviewTextInput="NumberOfPlayers_OnPreviewTextInput" Initialized="NumberOfPlayers_Initialized" TextChanged="NumberOfPlayers_TextChanged"></TextBox>
-        <Button x:Name="updateButt" Margin="10,147,394,145" Click="Button_Click_1">Update</Button>
+        <Button x:Name="updateButt" Margin="10,147,402,145" Click="Button_Click_1">Update</Button>
         <Button Margin="10,184,402,103" Click="Button_Click_2">Start</Button>
         <Button Margin="120,184,292,103" Click="Button_Click_3">Stop</Button>
-        <CheckBox x:Name="HiddenConsole" Margin="143,159,356,145"></CheckBox>
+        <CheckBox x:Name="HiddenConsole" Margin="143,147,347,145"></CheckBox>
+        <ComboBox x:Name="gameModes" Margin="10,76,403,215" Initialized="gameModes_Initialized" LostFocus="gameModes_LostFocus"></ComboBox>
     </Grid>
 </Window>
