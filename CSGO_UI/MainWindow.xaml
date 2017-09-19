@@ -15,6 +15,8 @@
         </ComboBox>
         <TextBox x:Name="NumberOfPlayers" Margin="467,147,10,145" PreviewTextInput="NumberOfPlayers_OnPreviewTextInput" Initialized="NumberOfPlayers_Initialized" TextChanged="NumberOfPlayers_TextChanged"></TextBox>
         <Button x:Name="updateButt" Margin="10,147,394,145" Click="Button_Click_1">Update</Button>
-        
+        <Button Margin="10,184,402,103" Click="Button_Click_2">Start</Button>
+        <Button Margin="120,184,292,103" Click="Button_Click_3">Stop</Button>
+        <CheckBox x:Name="HiddenConsole" Margin="143,159,356,145"></CheckBox>
     </Grid>
 </Window>

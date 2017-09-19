@@ -27,6 +27,7 @@ namespace CSGO_UI
     {
         public string SteamCdmPath { get; set; }
         public string MapCode { get; set; }
+        public string GameMode { get; set; }
         public int MaxPlayers { get; set; } = 10;
         public DateTime LastUpdated { get; set; } = DateTime.Now;
 
@@ -53,20 +54,20 @@ namespace CSGO_UI
         //creates a string for the given gamemode
         public string GetModes(string mode)
         {
-            string temp = "";
+            string temp = "+map";
             switch (mode)
             {
                 case "Dust 2":
-                    temp = "2Dust";
+                    temp += "+de_dust2";
                     break;
                 case "Dust":
-                    temp = "1Dust";
+                    temp += "de_dust";
                     break;
                 case "Nuke":
-                    temp = "deNuke";
+                    temp += "de_nuke";
                     break;
                 default:
-                    temp = "ckae";
+                    temp += "de_dust2";
                     break;
             }
             return temp;
@@ -152,50 +153,56 @@ namespace CSGO_UI
                 throw;
             }
         }
+
+        private void StartClient()
+        {
+            Process CSStart = new Process();
+            try
+            {
+                CSStart.StartInfo.FileName = SteamCdmPath + "\\steamapps\\common\\ARK Survival Evolved Dedicated Server\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe";
+                if (HiddenConsole.IsChecked.Value == true)
+                {
+                    CSStart.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                }
+                else
+                {
+                    CSStart.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                }
+                CSStart.StartInfo.Arguments = "srcds -game csgo -usercon +game_type 0 +game_mode 0 + mapgrout mg_active + map de_dust2";
+                CSStart.Start();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
+            }
+        }
+
+        private void StopClient()
+        {
+            Process CSStop = new Process();
+            try
+            {
+                CSStop.StartInfo.FileName = "cmd.exe";
+                CSStop.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+                CSStop.StartInfo.Arguments = "cmd.exe" + String.Format("/k {0} & {1}", "TASKKILL /IM srcds.exe", "exit");
+                CSStop.Start();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
+            }
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            StartClient();
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            StopClient();
+        }
     }
 }
-
-
-//Sub StartServer()
-//        SaveSettings()
-//        Dim ARKSO_Launch As System.Diagnostics.Process
-//        Try
-//            ARKSO_Launch = New System.Diagnostics.Process()
-//            ARKSO_Launch.StartInfo.FileName = My.Settings.SteamCMDPath & "\steamapps\common\ARK Survival Evolved Dedicated Server\ShooterGame\Binaries\Win64\ShooterGameServer.exe"
-//            If CheckBox2.Checked = True Then
-//                ARKSO_Launch.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-//            Else
-//                ARKSO_Launch.StartInfo.WindowStyle = ProcessWindowStyle.Normal
-//            End If
-//            ARKSO_Launch.StartInfo.Arguments = Chr(34) & ComboBox1.Text & "?listen?SessionName=" & TextBox2.Text & "?ServerAdminPassword=" & TextBox4.Text & "?ServerPassword=" & TextBox3.Text & "?Port=" & TextBox5.Text & "?QueryPort=" & TextBox6.Text & "?MaxPlayers=" & NumericUpDown1.Value & Chr(34) & " -" & ComboBox2.Text & " -" & ComboBox3.Text
-//            ARKSO_Launch.Start()
-//        Catch
-//            MessageBox.Show("Could not start process " & "ShooterGameServer.exe", "Error")
-//        End Try
-//    End Sub
-//    Sub StopServer()
-//        Dim ARKSO_Stop As System.Diagnostics.Process
-//        Try
-//            ARKSO_Stop = New System.Diagnostics.Process()
-//            ARKSO_Stop.StartInfo.FileName = "cmd.exe"
-//            ARKSO_Stop.StartInfo.WindowStyle = ProcessWindowStyle.Normal
-//            ARKSO_Stop.StartInfo.Arguments = "cmd.exe" & String.Format("/k {0} & {1}", "TASKKILL /IM ShooterGameServer.exe", "exit")
-//            ARKSO_Stop.Start()
-//        Catch
-//            MessageBox.Show("Could not stop process " & "ShooterGame.exe", "Error")
-//        End Try
-//    End Sub
-//    Sub UpdateServer()
-//        Dim ARKSO_Update As System.Diagnostics.Process
-//        Try
-//            ARKSO_Update = New System.Diagnostics.Process()
-//            ARKSO_Update.StartInfo.FileName = My.Settings.SteamCMDPath & "\steamcmd.exe"
-//            ARKSO_Update.StartInfo.WindowStyle = ProcessWindowStyle.Normal
-//            ARKSO_Update.StartInfo.Arguments = "+login anonymous +app_update 376030 +quit"
-//            ARKSO_Update.Start()
-//            My.Settings.Button3 = "Update " & "(Last: " & DateTime.Now.ToString("yyyy/MM/dd HH:mm") & ")"
-//            Button3.Text = "Update " & "(Last: " & DateTime.Now.ToString("yyyy/MM/dd HH:mm") & ")"
-//        Catch
-//            MessageBox.Show("Could not start process " & "SteamCMD", "Error")
-//        End Try
-//    End Sub
