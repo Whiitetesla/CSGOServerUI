@@ -310,7 +310,16 @@ namespace CSGO_UI
         {
             try
             {
-                GameSettings.SetMaxplayers(Int32.Parse(NumberOfPlayers.Text));
+                var tempInt = Int32.Parse(NumberOfPlayers.Text);
+                if(tempInt <= SelectedMode.MaxPlayers)
+                {
+                    GameSettings.SetMaxplayers(tempInt);
+                    temp_out.Text = "";
+                }
+                else
+                {
+                    temp_out.Text = "number Of player not matching with maximun for map the max is "+ SelectedMode.MaxPlayers;
+                }
             }
             catch (Exception exception)
             {
@@ -425,19 +434,22 @@ namespace CSGO_UI
 
         private void CSMaps_LostFocus(object sender, RoutedEventArgs e)
         {
-            GameSettings.SetMap(CSMaps.SelectionBoxItem.ToString());
-
-            
+            foreach (var map in SelectedMode.MapGroups)
+            {
+                if (map.Name == CSMaps.SelectionBoxItem.ToString())
+                {
+                    GameSettings.SetMap(map.Name);
+                }
+            }
         }
 
         private void gameModes_LostFocus(object sender, RoutedEventArgs e)
         {
-            GameSettings.SetGamemode(gameModes.SelectionBoxItem.ToString(), SelectedType, Modes.Games.IndexOf(SelectedType));
-
             foreach (var mode in SelectedType.Modes)
             {
                 if (mode.Name == gameModes.SelectionBoxItem.ToString())
                 {
+                    GameSettings.SetGamemode(mode.Name, SelectedType, Modes.Games.IndexOf(SelectedType));
                     SelectedMode = mode;
                     CSMaps.ItemsSource = SelectedMode.MapGroups;
                     CSMaps.SelectedIndex = 0;
