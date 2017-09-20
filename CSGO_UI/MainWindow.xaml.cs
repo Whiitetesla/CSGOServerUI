@@ -25,7 +25,7 @@ namespace CSGO_UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string SteamCdmPath { get; set; }
+        public string SteamCdmPath { get; set; } = "C:\\Servers\\CSGo";
         public string MapCode { get; set; }
         public string GameMode { get; set; }
         public int MaxPlayers { get; set; } = 10;
@@ -61,7 +61,7 @@ namespace CSGO_UI
 
         public string GetModeCode(string mode)
         {
-            string temp = "+game_type ";
+            string temp = " +game_type ";
             switch (mode)
             {
                 case "Cassic Competitive":
@@ -143,12 +143,6 @@ namespace CSGO_UI
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void CSMaps_Initialized(object sender, EventArgs e)
-        {
-            CSMaps.ItemsSource = Maps;
-            CSMaps.SelectedIndex = 0;
-        }
-
         private void NumberOfPlayers_Initialized(object sender, EventArgs e)
         {
             NumberOfPlayers.Text = MaxPlayers.ToString();
@@ -156,7 +150,13 @@ namespace CSGO_UI
 
         private void NumberOfPlayers_TextChanged(object sender, TextChangedEventArgs e)
         {
-            MaxPlayers = Int32.Parse(NumberOfPlayers.Text);
+            try
+            {
+                MaxPlayers = Int32.Parse(NumberOfPlayers.Text);
+            }
+            catch (Exception exception)
+            {
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -186,11 +186,11 @@ namespace CSGO_UI
         private void StartClient()
         {
             Process CSStart = new Process();
-            string serverString = "srcds -game csgo -console -usercon " + GameMode + "+mapgroup mg_active " + MapCode;
+            string serverString = "srcds -game csgo -console -usercon -maxplayers_override "+ MaxPlayers + GameMode + "+mapgroup mg_active " + MapCode;
             temp_out.Text = serverString;
             try
             {
-                CSStart.StartInfo.FileName = SteamCdmPath + "\\steamapps\\common\\ARK Survival Evolved Dedicated Server\\ShooterGame\\Binaries\\Win64\\ShooterGameServer.exe";
+                CSStart.StartInfo.FileName = SteamCdmPath + "\\steamapps\\common\\Counter-Strike Global Offensive Beta - Dedicated Server\\srcds.exe";
                 if (HiddenConsole.IsChecked.Value == true)
                 {
                     CSStart.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -241,6 +241,12 @@ namespace CSGO_UI
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             StopClient();
+        }
+
+        private void CSMaps_Initialized(object sender, EventArgs e)
+        {
+            CSMaps.ItemsSource = Maps;
+            CSMaps.SelectedIndex = 0;
         }
 
         private void gameModes_Initialized(object sender, EventArgs e)
