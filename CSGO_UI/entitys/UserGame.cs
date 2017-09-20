@@ -12,9 +12,12 @@ namespace CSGO_UI.entitys
         private int maxplayers = 10;
         private int gameType = 0;
         private int gameMode = 1;
-        private string mapCode = "random_classic";
         private Modes selectedGame;
-        private MapGroups selectedMap;
+        private MapGroups selectedMap = new MapGroups()
+        {
+            Name = "mg_de_dust2",
+            Group = ""
+        };
 
         public string GetMaxPlayers()
         {
@@ -41,17 +44,16 @@ namespace CSGO_UI.entitys
 
         public string GetMapCode()
         {
-            return " +mapgroup "+ mapCode;
+            return " +mapgroup "+selectedMap.Group+" +map " + selectedMap.Name;
         }
 
         public bool SetMap(string value)
         {
-            var temp = "mg_de_"+value;
             if(selectedGame != null)
             {
                 foreach (var map in selectedGame.MapGroups)
                 {
-                    if(map.Name == temp)
+                    if(map.Name == value)
                     {
                         selectedMap = map;
                     }
@@ -70,6 +72,7 @@ namespace CSGO_UI.entitys
         {
             if(game != null)
             {
+                this.gameType = gameType;
                 foreach (var mode in game.Modes)
                 {
                     if (mode.Name == value)

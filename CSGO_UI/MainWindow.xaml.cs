@@ -237,14 +237,7 @@ namespace CSGO_UI
                         {
                             var imp = RemoveAllNonLetters(maps[i]);
 
-                            if (maps[i].StartsWith("_"))
-                            {
-                                tempMap = "mg_" + imp;
-                            }
-                            else
-                            {
-                                tempMap = imp;
-                            }
+                            tempMap = imp;
                         }
                         else
                         {
@@ -308,14 +301,10 @@ namespace CSGO_UI
             try
             {
                 var tempInt = Int32.Parse(NumberOfPlayers.Text);
-                if(tempInt <= SelectedMode.MaxPlayers)
+                if(!GameSettings.SetMaxplayers(tempInt))
                 {
-                    GameSettings.SetMaxplayers(tempInt);
-                    temp_out.Text = "";
-                }
-                else
-                {
-                    temp_out.Text = "number Of player not matching with maximun for map the max is "+ SelectedMode.MaxPlayers;
+                    temp_out.Text = "number Of player not matching with maximun for map the max is " + SelectedMode.MaxPlayers;
+
                 }
             }
             catch (Exception)
@@ -350,7 +339,7 @@ namespace CSGO_UI
         private void StartClient()
         {
             Process CSStart = new Process();
-            string serverString = "srcds -game csgo -console -usercon -maxplayers_override "+ GameSettings.GetMaxplayersCode() + 
+            string serverString = "srcds -game csgo -console -usercon "+ GameSettings.GetMaxplayersCode() + 
                 GameSettings.GetGameMode() + GameSettings.GetMapCode();
 
             temp_out.Text = serverString;
@@ -369,12 +358,13 @@ namespace CSGO_UI
 
                 if (CSStart.Start())
                 {
-                    temp_out.Text = "server started";
+                    //temp_out.Text = "server started";
                 }
+                temp_out.Text = serverString;
             }
             catch (Exception)
             {
-                temp_out.Text = "error when trying to start the server";
+                //temp_out.Text = "error when trying to start the server";
 
             }
         }
@@ -465,13 +455,16 @@ namespace CSGO_UI
                     gameModes.SelectedIndex = 0;
                     SelectedMode = SelectedType.Modes[0];
 
+
                     foreach (var mode in SelectedType.Modes)
                     {
                         if (mode.Name == SelectedType.Modes[0].Name)
                         {
+                            GameSettings.SetGamemode(mode.Name, SelectedType, Modes.Games.IndexOf(SelectedType));
                             SelectedMode = mode;
                             CSMaps.ItemsSource = SelectedMode.MapGroups;
                             CSMaps.SelectedIndex = 0;
+                            GameSettings.SetMap(SelectedMode.MapGroups[0].Name);
                         }
                     }
                 }
