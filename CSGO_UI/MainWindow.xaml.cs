@@ -44,15 +44,12 @@ namespace CSGO_UI
             setMapsAndModes();
 
             InitializeComponent();
-
-            //GameSettings.SetGamemode(GameModes.First(), Type, Modes.Games.IndexOf(Type));
-            //GameSettings.SetMap(Maps.First());
         }
 
         private void setMapsAndModes()
         {
-            //string text = System.IO.File.ReadAllText("\\steamapps\\common\\Counter-Strike Global Offensive Beta - Dedicated Server\\csgo\\gamemodes.txt");
-            string text = System.IO.File.ReadAllText(@"C:\Users\NHL\Source\Repos\CSGOServerUI\CSGO_UI\gamemodes.txt");
+            string text = System.IO.File.ReadAllText(SteamCdmPath + "\\steamapps\\common\\Counter-Strike Global Offensive Beta - Dedicated Server\\csgo\\gamemodes.txt");
+            //string text = System.IO.File.ReadAllText(@"C:\Users\NHL\Source\Repos\CSGOServerUI\CSGO_UI\gamemodes.txt");
             string replacement = Regex.Replace(text, @"\t|\n|\r| ", "");
 
             replacement.Trim();
@@ -321,7 +318,7 @@ namespace CSGO_UI
                     temp_out.Text = "number Of player not matching with maximun for map the max is "+ SelectedMode.MaxPlayers;
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
             }
         }
@@ -344,7 +341,7 @@ namespace CSGO_UI
                 LastUpdated = DateTime.Now;
                 updateButt.Content = LastUpdated.ToString();
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 temp_out.Text = "error with the Steam cmd Please check if you entered the right path";
             }
@@ -375,7 +372,7 @@ namespace CSGO_UI
                     temp_out.Text = "server started";
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 temp_out.Text = "error when trying to start the server";
 
@@ -395,7 +392,7 @@ namespace CSGO_UI
                     temp_out.Text = "server stopped";
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 temp_out.Text = "error when trying to stop the server";
 
