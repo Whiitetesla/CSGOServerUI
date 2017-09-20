@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using CSGO_UI.entitys;
 
 namespace CSGO_UI
 {
@@ -26,9 +27,10 @@ namespace CSGO_UI
     public partial class MainWindow : Window
     {
         public string SteamCdmPath { get; set; } = "C:\\Servers\\CSGo";
-        public string MapCode { get; set; }
-        public string GameMode { get; set; }
-        public int MaxPlayers { get; set; } = 10;
+        public UserGame GameSettings { get; set; }
+        public GameMode Modes { get; set; }
+        public GameTypes SelectedType { get; set; }
+        public Modes SelectedMode { get; set; }
         public DateTime LastUpdated { get; set; } = DateTime.Now;
 
         public ObservableCollection<string> GameModes { get; set; } = new ObservableCollection<string>();
@@ -37,75 +39,231 @@ namespace CSGO_UI
 
         public MainWindow()
         {
-            InitializeComponent();
-            UpdateClient();
-
+            Modes = new GameMode();
+            GameSettings = new UserGame();
             setMapsAndModes();
-            MapCode = GetMapCodes(Maps.First());
-            GameMode = GetModeCode(GameModes.First());
+
+            InitializeComponent();
+
+            //GameSettings.SetGamemode(GameModes.First(), Type, Modes.Games.IndexOf(Type));
+            //GameSettings.SetMap(Maps.First());
         }
 
         private void setMapsAndModes()
         {
-            Maps.Add("Dust 2");
-            Maps.Add("Dust");
-            Maps.Add("Nuke");
+            //string text = System.IO.File.ReadAllText("\\steamapps\\common\\Counter-Strike Global Offensive Beta - Dedicated Server\\csgo\\gamemodes.txt");
+            string text = System.IO.File.ReadAllText(@"C:\Users\NHL\Source\Repos\CSGOServerUI\CSGO_UI\gamemodes.txt");
+            string replacement = Regex.Replace(text, @"\t|\n|\r| ", "");
 
-            GameModes.Add("Cassic Competitive");
-            GameModes.Add("Cassic Casual");
-            GameModes.Add("Arms Race");
-            GameModes.Add("Demolition");
-            GameModes.Add("Deathmatch");
+            replacement.Trim();
+            var topString = replacement.Split(new string[] { "gameTypes" }, StringSplitOptions.None);
+            var endString = topString[1].Split(new string[] { "}}}}}" }, StringSplitOptions.None);
+            var mainString = endString[0];
+            mainString += "}}}}}";
+
+            Modes.Games = getAllGameTypes(mainString);
+
+            Console.WriteLine(Modes);
 
         }
 
-        public string GetModeCode(string mode)
+        public static string RemoveNONCharactor(string str)
         {
-            string temp = " +game_type ";
-            switch (mode)
+            var temp = str;
+            try
             {
-                case "Cassic Competitive":
-                    temp += "0 +game_mode 1 ";
-                    break;
-                case "Cassic Casual":
-                    temp += "0 +game_mode 0 ";
-                    break;
-                case "Arms Race":
-                    temp += "1 +game_mode 0 ";
-                    break;
-                case "Demolition":
-                    temp += "1 +game_mode 1 ";
-                    break;
-                case "Deathmatch":
-                    temp += "1 +game_mode 2 ";
-                    break;
-                default:
-                    temp += "0 +game_mode 1 ";
-                    break;
+                while (!Char.IsLetterOrDigit(temp[0]))
+                {
+                    temp = temp.Remove(0, 1);
+                }
+                while (!Char.IsLetterOrDigit(temp[temp.Length - 1]))
+                {
+                    temp = temp.Remove(temp.Length - 1, 1);
+                }
+            }
+            catch (Exception)
+            {
+                return "";
             }
             return temp;
         }
 
-        //creates a string for the given gamemode
-        public string GetMapCodes(string map)
+        public static string RemoveAllNonLetters(string str)
         {
-            string temp = "+map ";
-            switch (map)
+            var temp = str;
+            try
             {
-                case "Dust 2":
-                    temp += "de_dust2";
-                    break;
-                case "Dust":
-                    temp += "de_dust";
-                    break;
-                case "Nuke":
-                    temp += "de_nuke";
-                    break;
-                default:
-                    temp += "de_dust2";
-                    break;
+                while (!Char.IsLetter(temp[0]))
+                {
+                    temp = temp.Remove(0, 1);
+                }
+                while (!Char.IsLetter(temp[temp.Length - 1]))
+                {
+                    temp = temp.Remove(temp.Length - 1, 1);
+                }
+            }
+            catch (Exception)
+            {
             }
             return temp;
+        }
+
+        public ObservableCollection<GameTypes> getAllGameTypes(string mainString)
+        {
+            ObservableCollection<GameTypes> gameTypes = new ObservableCollection<GameTypes>();
+
+            List<string> gameTypesString = mainString.Split(new string[] { "}}}}" }, StringSplitOptions.None).ToList();
+            gameTypesString[0] = gameTypesString[0].Remove(0, 2);
+            gameTypesString.RemoveAt(gameTypesString.Count - 1);
+
+            foreach (var obj in gameTypesString)
+            {
+                var tempArray = obj.Split(new string[] { "{" }, StringSplitOptions.None).ToList();
+                var temp = RemoveNONCharactor(tempArray[0]);
+
+                ObservableCollection<Modes> gameModes = GetGameTypeModes(temp, string.Join(",", tempArray.ToArray()));
+
+                gameTypes.Add(new GameTypes()
+                {
+                    Name = temp,
+                    Modes = gameModes
+                });
+            }
+            return gameTypes;
+        }
+
+        public ObservableCollection<Modes> GetGameTypeModes(string gameType, string mainString)
+        {
+            ObservableCollection<Modes> gameModes = new ObservableCollection<Modes>();
+            ObservableCollection<MapGroups> gameMaps = new ObservableCollection<MapGroups>();
+
+            List<string> modestring = mainString.Split(new string[] { "}}" }, StringSplitOptions.None).ToList();
+            var maxPlayersStr = mainString.Split(new string[] { "maxplayers" }, StringSplitOptions.None);
+            List<int> mPlayers = new List<int>();
+
+            foreach (var p in maxPlayersStr)
+            {
+                var temp = RemoveNONCharactor(p);
+                var maxPstr = temp.Substring(0, 4);
+                try
+                {
+                    mPlayers.Add(int.Parse(RemoveNONCharactor(maxPstr)));
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            for (int i = 0; i < modestring.Count; i++)
+            {
+                List<int> removeable = new List<int>();
+                if (modestring[i].StartsWith("/"))
+                {
+                    modestring[i - 1] += modestring[i];
+                    removeable.Add(i);
+                }
+
+                foreach (var remove in removeable)
+                {
+                    modestring.RemoveAt(remove);
+                }
+            }
+
+            for (int i = 0; i < modestring.Count; i++)
+            {
+                List<int> removeable = new List<int>();
+                if (modestring[i].Contains("weaponprogression_t"))
+                {
+                    modestring[i - 1] += modestring[i];
+                    removeable.Add(i);
+                }
+
+                foreach (var remove in removeable)
+                {
+                    modestring.RemoveAt(remove);
+                }
+            }
+
+            var cookie = modestring[0].Split(new string[] { "," }, StringSplitOptions.None);
+            var cake = RemoveNONCharactor(cookie[2]);
+            gameMaps = GetGameModeMaps(modestring[0]);
+            gameModes.Add(new Modes()
+            {
+                Name = cake,
+                MaxPlayers = mPlayers[0],
+                MapGroups = gameMaps
+            });
+
+
+
+            for (int i = 1; i < modestring.Count; i++)
+            {
+                var temp = modestring[i].Split(new string[] { "," }, StringSplitOptions.None)[0];
+                if (!temp.StartsWith("//"))
+                {
+                    if (!temp.Contains("weaponprogression_t"))
+                    {
+                        temp = RemoveNONCharactor(temp);
+
+                        gameMaps = GetGameModeMaps(modestring[i]);
+
+                        gameModes.Add(new Modes()
+                        {
+                            Name = temp,
+                            MaxPlayers = mPlayers[i],
+                            MapGroups = gameMaps
+            });
+                    }
+                }
+            }
+
+            return gameModes;
+        }
+
+        public ObservableCollection<MapGroups> GetGameModeMaps(string mainString)
+        {
+            ObservableCollection<MapGroups> gameMaps = new ObservableCollection<MapGroups>();
+            var tempGroup = "";
+            var tempMap = "";
+
+            var gameMap = mainString.Split(new string[] { "mapgroupsSP", "//Mapgroupsforonlinemodes" }, StringSplitOptions.None);
+            if (gameMap.Length > 1)
+            {
+                var gameMapSlit = gameMap[1].Split(new string[] { "//" }, StringSplitOptions.None);
+                foreach (var item in gameMapSlit)
+                {
+                    var maps = item.Split(new string[] { "mg" }, StringSplitOptions.None);
+
+                    for (int i = 1; i < maps.Length; i++)
+                    {
+                        if (maps[i].Contains("_"))
+                        {
+                            var imp = RemoveAllNonLetters(maps[i]);
+
+                            if (maps[i].StartsWith("_"))
+                            {
+                                tempMap = "mg_" + imp;
+                            }
+                            else
+                            {
+                                tempMap = imp;
+                            }
+                        }
+                        else
+                        {
+                            tempGroup = RemoveNONCharactor(maps[i]);
+                        }
+                        
+                        gameMaps.Add(new MapGroups()
+                        {
+                            Name = tempMap,
+                            Group = tempGroup
+                        });
+                    }
+                }
+            }
+
+            return gameMaps;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -145,14 +303,14 @@ namespace CSGO_UI
 
         private void NumberOfPlayers_Initialized(object sender, EventArgs e)
         {
-            NumberOfPlayers.Text = MaxPlayers.ToString();
+            NumberOfPlayers.Text = GameSettings.GetMaxPlayers();
         }
 
         private void NumberOfPlayers_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
-                MaxPlayers = Int32.Parse(NumberOfPlayers.Text);
+                GameSettings.SetMaxplayers(Int32.Parse(NumberOfPlayers.Text));
             }
             catch (Exception exception)
             {
@@ -186,7 +344,9 @@ namespace CSGO_UI
         private void StartClient()
         {
             Process CSStart = new Process();
-            string serverString = "srcds -game csgo -console -usercon -maxplayers_override "+ MaxPlayers + GameMode + "+mapgroup mg_active " + MapCode;
+            string serverString = "srcds -game csgo -console -usercon -maxplayers_override "+ GameSettings.GetMaxplayersCode() + 
+                GameSettings.GetGameMode() + GameSettings.GetMapCode();
+
             temp_out.Text = serverString;
             try
             {
@@ -245,24 +405,69 @@ namespace CSGO_UI
 
         private void CSMaps_Initialized(object sender, EventArgs e)
         {
-            CSMaps.ItemsSource = Maps;
+            CSMaps.ItemsSource = SelectedMode.MapGroups;
             CSMaps.SelectedIndex = 0;
         }
 
         private void gameModes_Initialized(object sender, EventArgs e)
         {
-            gameModes.ItemsSource = GameModes;
+            gameModes.ItemsSource = SelectedType.Modes;
             gameModes.SelectedIndex = 0;
+            SelectedMode = SelectedType.Modes[0];
+        }
+
+        private void gameTypes_Initialized(object sender, EventArgs e)
+        {
+            gameTypes.ItemsSource = Modes.Games;
+            gameTypes.SelectedIndex = 0;
+            SelectedType = Modes.Games[0];
         }
 
         private void CSMaps_LostFocus(object sender, RoutedEventArgs e)
         {
-            MapCode = GetMapCodes(CSMaps.SelectionBoxItem.ToString());
+            GameSettings.SetMap(CSMaps.SelectionBoxItem.ToString());
+
+            
         }
 
         private void gameModes_LostFocus(object sender, RoutedEventArgs e)
         {
-            GameMode = GetModeCode(gameModes.SelectionBoxItem.ToString());
+            GameSettings.SetGamemode(gameModes.SelectionBoxItem.ToString(), SelectedType, Modes.Games.IndexOf(SelectedType));
+
+            foreach (var mode in SelectedType.Modes)
+            {
+                if (mode.Name == gameModes.SelectionBoxItem.ToString())
+                {
+                    SelectedMode = mode;
+                    CSMaps.ItemsSource = SelectedMode.MapGroups;
+                    CSMaps.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private void gameTypes_LostFocus(object sender, RoutedEventArgs e)
+        {
+            foreach (var type in Modes.Games)
+            {
+                if(type.Name == gameTypes.SelectionBoxItem.ToString())
+                {
+                    SelectedType = type;
+                    gameModes.ItemsSource = SelectedType.Modes;
+                    gameModes.SelectedIndex = 0;
+                    SelectedMode = SelectedType.Modes[0];
+
+                    foreach (var mode in SelectedType.Modes)
+                    {
+                        if (mode.Name == SelectedType.Modes[0].Name)
+                        {
+                            SelectedMode = mode;
+                            CSMaps.ItemsSource = SelectedMode.MapGroups;
+                            CSMaps.SelectedIndex = 0;
+                        }
+                    }
+                }
+            }
+
         }
     }
 }
