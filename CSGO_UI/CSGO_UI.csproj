@@ -62,6 +62,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BLL\BLLFacade.cs" />
+    <Compile Include="BLL\ServerComands.cs" />
+    <Compile Include="DLL\DLLFacade.cs" />
+    <Compile Include="DLL\ReadAllGames.cs" />
+    <Compile Include="DLL\StringEditor.cs" />
     <Compile Include="entitys\GameMode.cs" />
     <Compile Include="entitys\GameTypes.cs" />
     <Compile Include="entitys\MapGroups.cs" />

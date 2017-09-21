@@ -26,7 +26,11 @@ namespace CSGO_UI.entitys
 
         public string GetMaxplayersCode()
         {
-            return " -maxplayers_override " + maxplayers;
+            if (maxplayers <= selectedGame.MaxPlayers)
+            {
+                return " -maxplayers_override " + maxplayers;
+            }
+            return " -maxplayers_override " + selectedGame.MaxPlayers;
         }
         
         public bool SetMaxplayers(int value)
