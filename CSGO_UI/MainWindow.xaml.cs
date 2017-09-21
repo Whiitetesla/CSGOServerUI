@@ -26,16 +26,12 @@ namespace CSGO_UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string SteamCdmPath { get; set; } = "C:\\Servers\\CSGo";
+        public string SteamCdmPath { get; set; }
         public UserGame GameSettings { get; set; }
         public GameMode Modes { get; set; }
         public GameTypes SelectedType { get; set; }
         public Modes SelectedMode { get; set; }
-        public DateTime LastUpdated { get; set; } = DateTime.Now;
-
-        public ObservableCollection<string> GameModes { get; set; } = new ObservableCollection<string>();
-        public ObservableCollection<string> Maps { get; set; } = new ObservableCollection<string>();
-        
+        public DateTime LastUpdated { get; set; }
 
         public MainWindow()
         {
