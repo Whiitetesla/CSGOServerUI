@@ -81,8 +81,7 @@ namespace CSGO_UI
                         tempIndex = i;
                     }
                 }
-                temp.Substring(0, tempIndex);
-                SteamCdmPath = temp;
+                SteamCdmPath = temp.Substring(0, tempIndex); ;
                 SteamCMDName.Text = SteamCdmPath;
                 try
                 {
@@ -91,7 +90,7 @@ namespace CSGO_UI
                 }
                 catch (Exception)
                 {
-                    temp_out.Text = "the path does not match a standart steam cmd path. \n Can't read \\steamapps\\common\\Counter-Strike Global Offensive Beta - Dedicated Server\\csgo\\gamemodes.txt";
+                    temp_out.Text = "the path does not match a standart steam cmd path. \n Can't read " + SteamCdmPath;
                 }
             }              
         }        
