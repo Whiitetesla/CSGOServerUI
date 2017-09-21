@@ -14,9 +14,9 @@
         <TextBlock Margin="11,111,403,184">Game mode</TextBlock>
 
 
-        <ComboBox x:Name="gameTypes" Margin="10,78,403,213" Initialized="gameTypes_Initialized" LostFocus="gameTypes_LostFocus"></ComboBox>
-        <ComboBox x:Name="gameModes" Margin="10,140,403,151" Initialized="gameModes_Initialized" LostFocus="gameModes_LostFocus"></ComboBox>
-        <ComboBox x:Name="CSMaps" Margin="403,76,10,215" Initialized="CSMaps_Initialized" LostFocus="CSMaps_LostFocus"/>
+        <ComboBox x:Name="gameTypes" Margin="10,78,403,208" Initialized="gameTypes_Initialized" LostFocus="gameTypes_LostFocus"></ComboBox>
+        <ComboBox x:Name="gameModes" Margin="10,135,403,151" Initialized="gameModes_Initialized" LostFocus="gameModes_LostFocus"></ComboBox>
+        <ComboBox x:Name="CSMaps" Margin="403,76,10,208" Initialized="CSMaps_Initialized" LostFocus="CSMaps_LostFocus"/>
 
 
         <TextBox x:Name="SteamCMDName"  Margin="10,10,119,282" IsEnabled="False"></TextBox>

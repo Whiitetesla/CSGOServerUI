@@ -296,6 +296,19 @@ namespace CSGO_UI
                 try
                 {
                     setMapsAndModes();
+
+                    gameTypes.ItemsSource = Modes.Games;
+                    gameTypes.SelectedIndex = 0;
+                    if (Modes.Games.Count > 0)
+                        SelectedType = Modes.Games[0];
+
+                    gameModes.ItemsSource = SelectedType.Modes;
+                    gameModes.SelectedIndex = 0;
+                    if (SelectedType.Modes.Count > 0)
+                        SelectedMode = SelectedType.Modes[0];
+
+                    CSMaps.ItemsSource = SelectedMode.MapGroups;
+                    CSMaps.SelectedIndex = 0;
                 }
                 catch (Exception)
                 {
