@@ -41,6 +41,12 @@ namespace CSGO_UI
             SelectedMode = new Modes();
 
             InitializeComponent();
+
+            //auto update if the path was set to something
+            if (!(SteamCdmPath == "" || SteamCdmPath == null))
+            {
+                DoUpdate();
+            }
         }
 
         private void SetModes()
@@ -123,16 +129,7 @@ namespace CSGO_UI
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                LastUpdated = new BLL.ServerComands().UpdateClient(SteamCdmPath);
-
-                updateButt.Content = LastUpdated.ToString();
-            }
-            catch (Exception)
-            {
-                temp_out.Text = "error with the Steam cmd Please check if you entered the right path";
-            }
+            DoUpdate();
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -209,6 +206,20 @@ namespace CSGO_UI
             UpdateGameTypeList();
         }
 
+        private void DoUpdate()
+        {
+            try
+            {
+                LastUpdated = new BLL.ServerComands().UpdateClient(SteamCdmPath);
+
+                updateButt.Content = LastUpdated.ToString();
+            }
+            catch (Exception)
+            {
+                temp_out.Text = "error with the Steam cmd Please check if you entered the right path";
+            }
+        }
+
         private void UpdateGameTypeList()
         {
             foreach (var type in Modes.Games)
@@ -257,6 +268,5 @@ namespace CSGO_UI
             CSMaps.ItemsSource = SelectedMode.MapGroups;
             CSMaps.SelectedIndex = 0;
         }
-
     }
 }
