@@ -41,7 +41,8 @@ namespace CSGO_UI
         {
             Modes = new GameMode();
             GameSettings = new UserGame();
-            setMapsAndModes();
+            SelectedType = new GameTypes();
+            SelectedMode = new Modes();
 
             InitializeComponent();
         }
@@ -267,6 +268,7 @@ namespace CSGO_UI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+
            OpenFileDialog fileDialog = new OpenFileDialog();
 
             fileDialog.Filter = "Programer (.exe)|*.exe|Alle filer (*.*)|*.*";
@@ -291,6 +293,7 @@ namespace CSGO_UI
 
                 SteamCdmPath = temp.Substring(0, tempIndex);
                 SteamCMDName.Text = SteamCdmPath;
+                setMapsAndModes();
             }
         }
 
@@ -314,6 +317,10 @@ namespace CSGO_UI
                 {
                     temp_out.Text = "number Of player not matching with maximun for map the max is " + SelectedMode.MaxPlayers;
 
+                }
+                else
+                {
+                    temp_out.Text = "";
                 }
             }
             catch (Exception)
@@ -418,14 +425,16 @@ namespace CSGO_UI
         {
             gameModes.ItemsSource = SelectedType.Modes;
             gameModes.SelectedIndex = 0;
-            SelectedMode = SelectedType.Modes[0];
+            if (SelectedType.Modes.Count > 0)
+                SelectedMode = SelectedType.Modes[0];
         }
 
         private void gameTypes_Initialized(object sender, EventArgs e)
         {
             gameTypes.ItemsSource = Modes.Games;
             gameTypes.SelectedIndex = 0;
-            SelectedType = Modes.Games[0];
+            if (Modes.Games.Count > 0)
+                SelectedType = Modes.Games[0];
         }
 
         private void CSMaps_LostFocus(object sender, RoutedEventArgs e)

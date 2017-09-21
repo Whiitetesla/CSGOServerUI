@@ -7,20 +7,25 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <TextBox x:Name="temp_out" Margin="0,216,0,20"></TextBox>
+        <TextBox x:Name="temp_out" Margin="0,242,0,20"></TextBox>
+        <TextBlock Margin="440,123,10,172">Max players</TextBlock>
+        <TextBlock Margin="403,52,10,243">Maps</TextBlock>
+        <TextBlock Margin="10,49,404,246">Game type</TextBlock>
+        <TextBlock Margin="11,111,403,184">Game mode</TextBlock>
 
-        <ComboBox x:Name="gameTypes" Margin="11,76,402,215" Initialized="gameTypes_Initialized" LostFocus="gameTypes_LostFocus"></ComboBox>
-        <ComboBox x:Name="gameModes" Margin="11,114,402,177" Initialized="gameModes_Initialized" LostFocus="gameModes_LostFocus"></ComboBox>
+
+        <ComboBox x:Name="gameTypes" Margin="10,78,403,213" Initialized="gameTypes_Initialized" LostFocus="gameTypes_LostFocus"></ComboBox>
+        <ComboBox x:Name="gameModes" Margin="10,140,403,151" Initialized="gameModes_Initialized" LostFocus="gameModes_LostFocus"></ComboBox>
         <ComboBox x:Name="CSMaps" Margin="403,76,10,215" Initialized="CSMaps_Initialized" LostFocus="CSMaps_LostFocus"/>
 
 
         <TextBox x:Name="SteamCMDName"  Margin="10,10,119,282" IsEnabled="False"></TextBox>
             <Button x:Name="SteamCMDButt" Margin="403,10,10,282" Click="Button_Click">SteamCMD folder</Button>
-        <TextBox x:Name="NumberOfPlayers" Margin="467,147,10,145" PreviewTextInput="NumberOfPlayers_OnPreviewTextInput" Initialized="NumberOfPlayers_Initialized" TextChanged="NumberOfPlayers_TextChanged"></TextBox>
-        <Button x:Name="updateButt" Margin="10,147,402,145" Click="Button_Click_1">Update</Button>
-        <Button Margin="10,184,402,103" Click="Button_Click_2">Start</Button>
-        <Button Margin="120,184,292,103" Click="Button_Click_3">Stop</Button>
-        <CheckBox x:Name="HiddenConsole" Margin="143,147,347,145"></CheckBox>
+        <TextBox x:Name="NumberOfPlayers" Margin="440,147,10,145" PreviewTextInput="NumberOfPlayers_OnPreviewTextInput" Initialized="NumberOfPlayers_Initialized" TextChanged="NumberOfPlayers_TextChanged"></TextBox>
+        <Button x:Name="updateButt" Margin="11,173,401,119" Click="Button_Click_1">Update</Button>
+        <Button Margin="10,205,402,82" Click="Button_Click_2">Start</Button>
+        <Button Margin="120,205,292,82" Click="Button_Click_3">Stop</Button>
+        <CheckBox x:Name="HiddenConsole" Margin="120,152,370,140" RenderTransformOrigin="0.566,0.725"></CheckBox>
 
     </Grid>
 </Window>

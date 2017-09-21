@@ -9,7 +9,7 @@ namespace CSGO_UI.entitys
     public class UserGame
     {
         //how many players the user wich to have in a game
-        private int maxplayers = 10;
+        private int maxplayers = 0;
         private int gameType = 0;
         private int gameMode = 1;
         private Modes selectedGame;
