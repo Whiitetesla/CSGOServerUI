@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSGO_UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="715.642">
     <Grid>
         <TextBox x:Name="temp_out" Margin="0,242,0,20"></TextBox>
         <TextBlock Margin="440,123,10,172">Max players</TextBlock>
@@ -20,12 +20,11 @@
 
 
         <TextBox x:Name="SteamCMDName"  Margin="10,10,119,282" IsEnabled="False"></TextBox>
-            <Button x:Name="SteamCMDButt" Margin="403,10,10,282" Click="Button_Click">SteamCMD folder</Button>
+            <Button x:Name="SteamCMDButt" Margin="594,10,10,282" Click="Button_Click">SteamCMD folder</Button>
         <TextBox x:Name="NumberOfPlayers" Margin="440,147,10,145" PreviewTextInput="NumberOfPlayers_OnPreviewTextInput" Initialized="NumberOfPlayers_Initialized" TextChanged="NumberOfPlayers_TextChanged"></TextBox>
         <Button x:Name="updateButt" Margin="11,173,401,119" Click="Button_Click_1">Update</Button>
         <Button Margin="10,205,402,82" Click="Button_Click_2">Start</Button>
-        <Button Margin="120,205,292,82" Click="Button_Click_3">Stop</Button>
-        <CheckBox x:Name="HiddenConsole" Margin="120,152,370,140" RenderTransformOrigin="0.566,0.725"></CheckBox>
+        <Button Margin="402,205,10,82" Click="Button_Click_3">Stop</Button>
 
     </Grid>
 </Window>
