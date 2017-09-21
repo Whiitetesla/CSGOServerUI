@@ -21,9 +21,9 @@ namespace CSGO_UI.BLL
                 CSUpdate.Start();
                 return DateTime.Now;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -42,9 +42,9 @@ namespace CSGO_UI.BLL
                     return true;
                 return false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -60,9 +60,9 @@ namespace CSGO_UI.BLL
                     return true;
                 return false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
 
             }
         }
