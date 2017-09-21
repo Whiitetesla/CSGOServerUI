@@ -67,11 +67,11 @@
     <Compile Include="DLL\DLLFacade.cs" />
     <Compile Include="DLL\ReadAllGames.cs" />
     <Compile Include="DLL\StringEditor.cs" />
-    <Compile Include="entitys\GameMode.cs" />
-    <Compile Include="entitys\GameTypes.cs" />
-    <Compile Include="entitys\MapGroups.cs" />
-    <Compile Include="entitys\Modes.cs" />
-    <Compile Include="entitys\UserGame.cs" />
+    <Compile Include="Entitys\GameMode.cs" />
+    <Compile Include="Entitys\GameTypes.cs" />
+    <Compile Include="Entitys\MapGroups.cs" />
+    <Compile Include="Entitys\Modes.cs" />
+    <Compile Include="Entitys\UserGame.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

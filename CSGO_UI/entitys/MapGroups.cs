@@ -15,7 +15,7 @@ namespace CSGO_UI.entitys
 
         public override string ToString()
         {
-            return Group+" "+ Name;
+            return $"{Group} {Name}";
         }
     }
 }

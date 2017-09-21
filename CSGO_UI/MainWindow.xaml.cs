@@ -29,6 +29,7 @@ namespace CSGO_UI
         public string SteamCdmPath { get; set; }
         public UserGame GameSettings { get; set; }
         public GameMode Modes { get; set; }
+        //the selected information right now
         public GameTypes SelectedType { get; set; }
         public Modes SelectedMode { get; set; }
         public DateTime LastUpdated { get; set; }
@@ -48,14 +49,14 @@ namespace CSGO_UI
                 DoUpdate();
             }
         }
-
+        //gets and updates the mode for the game information
         private void SetModes()
         {
 
             Modes.Games = new DLL.ReadAllGames().GetGames(SteamCdmPath);
 
         }
-
+        //gets the path for the steam cdm
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var temp = "";
@@ -86,27 +87,26 @@ namespace CSGO_UI
                 try
                 {
                     SetModes();
-                    SetGameTypesList();
-                    UpdateGameTypeList();
+                    InitGameComboboxs();
                 }
                 catch (Exception)
                 {
                     temp_out.Text = "the path does not match a standart steam cmd path. \n Can't read \\steamapps\\common\\Counter-Strike Global Offensive Beta - Dedicated Server\\csgo\\gamemodes.txt";
                 }
             }              
-        }
-
+        }        
+        //makes sure that there only can be inserted numbers in the text field
         private void NumberOfPlayers_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
-
+        //sets a template value for the max players
         private void NumberOfPlayers_Initialized(object sender, EventArgs e)
         {
             NumberOfPlayers.Text = GameSettings.GetMaxPlayers();
         }
-
+        //when the text changes we check if we can update the max players
         private void NumberOfPlayers_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -126,12 +126,12 @@ namespace CSGO_UI
             {
             }
         }
-
+        //updates the server
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             DoUpdate();
         }
-
+        //starts the server
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             try
@@ -150,7 +150,7 @@ namespace CSGO_UI
                 temp_out.Text = "error when trying to start the server";
             }
         }
-
+        //stops the server
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             try
@@ -169,22 +169,7 @@ namespace CSGO_UI
                 temp_out.Text = "error when trying to stop the server";
             }
         }
-
-        private void CSMaps_Initialized(object sender, EventArgs e)
-        {
-            SetCSMapList();
-        }
-
-        private void gameModes_Initialized(object sender, EventArgs e)
-        {
-            SetGameModesList();
-        }        
-
-        private void gameTypes_Initialized(object sender, EventArgs e)
-        {
-            SetGameTypesList();
-        }
-
+        //what will happen when csmaps combobox loses focus
         private void CSMaps_LostFocus(object sender, RoutedEventArgs e)
         {
             foreach (var map in SelectedMode.MapGroups)
@@ -195,17 +180,17 @@ namespace CSGO_UI
                 }
             }
         }
-
+        //what will happen when gamemodes combobox loses focus
         private void gameModes_LostFocus(object sender, RoutedEventArgs e)
         {
             UpdateGameModeList();
         }
-
+        //what will happen when gametypes combobox loses focus
         private void gameTypes_LostFocus(object sender, RoutedEventArgs e)
         {
             UpdateGameTypeList();
         }
-
+        //method for updating the csgo server
         private void DoUpdate()
         {
             try
@@ -219,7 +204,7 @@ namespace CSGO_UI
                 temp_out.Text = "error with the Steam cmd Please check if you entered the right path";
             }
         }
-
+        //updates the list of gametypes if there was a change with it
         private void UpdateGameTypeList()
         {
             foreach (var type in Modes.Games)
@@ -232,7 +217,7 @@ namespace CSGO_UI
                 }
             }
         }
-
+        //updates the list of gamemodes if there was a change with it
         private void UpdateGameModeList()
         {
             foreach (var mode in SelectedType.Modes)
@@ -247,6 +232,7 @@ namespace CSGO_UI
                 }
             }
         }
+        //sets the list of the game type
         private void SetGameTypesList()
         {
             gameTypes.ItemsSource = Modes.Games;
@@ -254,7 +240,7 @@ namespace CSGO_UI
             if (Modes.Games.Count > 0)
                 SelectedType = Modes.Games[0];
         }
-
+        //sets the list of the game modes
         private void SetGameModesList()
         {
             gameModes.ItemsSource = SelectedType.Modes;
@@ -262,11 +248,17 @@ namespace CSGO_UI
             if (SelectedType.Modes.Count > 0)
                 SelectedMode = SelectedType.Modes[0];
         }
-
+        //sets the list of the game maps
         private void SetCSMapList()
         {
             CSMaps.ItemsSource = SelectedMode.MapGroups;
             CSMaps.SelectedIndex = 0;
+        }
+        //updates all the comboboxes with the new data
+        private void InitGameComboboxs()
+        {
+            SetGameTypesList();
+            UpdateGameTypeList();
         }
     }
 }
