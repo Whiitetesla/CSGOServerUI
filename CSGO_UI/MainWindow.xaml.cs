@@ -231,7 +231,7 @@ namespace CSGO_UI
                 {
                     var maps = item.Split(new string[] { "mg" }, StringSplitOptions.None);
 
-                    for (int i = 1; i < maps.Length; i++)
+                    for (int i = 0; i < maps.Length; i++)
                     {
                         if (maps[i].Contains("_"))
                         {
@@ -243,12 +243,21 @@ namespace CSGO_UI
                         {
                             tempGroup = RemoveNONCharactor(maps[i]);
                         }
-                        
-                        gameMaps.Add(new MapGroups()
+
+                        if (tempMap != "")
                         {
-                            Name = tempMap,
-                            Group = tempGroup
-                        });
+                            if (gameMaps.FirstOrDefault(obj => obj.Group == "inactivemaps" && obj.Name == "de_dust") != null && tempMap == "de_dust")
+                            {
+                                tempMap += "2";
+                            }
+                            gameMaps.Add(new MapGroups()
+                            {
+                                Name = tempMap,
+                                Group = tempGroup
+                            });
+                        }
+
+                        tempMap = "";
                     }
                 }
             }
@@ -464,7 +473,8 @@ namespace CSGO_UI
                             SelectedMode = mode;
                             CSMaps.ItemsSource = SelectedMode.MapGroups;
                             CSMaps.SelectedIndex = 0;
-                            GameSettings.SetMap(SelectedMode.MapGroups[0].Name);
+                            if(SelectedMode.MapGroups.Count > 0)
+                                GameSettings.SetMap(SelectedMode.MapGroups[0].Name);
                         }
                     }
                 }

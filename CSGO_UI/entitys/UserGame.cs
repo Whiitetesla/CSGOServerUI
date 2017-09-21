@@ -15,7 +15,7 @@ namespace CSGO_UI.entitys
         private Modes selectedGame;
         private MapGroups selectedMap = new MapGroups()
         {
-            Name = "mg_de_dust2",
+            Name = "de_dust2",
             Group = ""
         };
 
