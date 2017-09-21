@@ -44,7 +44,7 @@ namespace CSGO_UI
             InitializeComponent();
 
             //auto update if the path was set to something
-            if (!(SteamCdmPath == "" || SteamCdmPath == null))
+            if (!string.IsNullOrEmpty(SteamCdmPath))
             {
                 DoUpdate();
             }
@@ -59,7 +59,6 @@ namespace CSGO_UI
         //gets the path for the steam cdm
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var temp = "";
             OpenFileDialog fileDialog = new OpenFileDialog();
 
             fileDialog.Filter = "Programer (.exe)|*.exe|Alle filer (*.*)|*.*";
@@ -72,7 +71,7 @@ namespace CSGO_UI
 
             if (userClick == true)
             {
-                temp = System.IO.Path.GetFullPath(fileDialog.FileName);
+                var temp = System.IO.Path.GetFullPath(fileDialog.FileName);
                 int tempIndex = 0;
                 for (int i = 0; i < temp.Length; i++)
                 {
@@ -148,6 +147,7 @@ namespace CSGO_UI
             {
                 temp_out.Text = "error when trying to start the server";
             }
+            temp_out.Text = GameSettings.GetMapCode();
         }
         //stops the server
         private void Button_Click_3(object sender, RoutedEventArgs e)
@@ -173,7 +173,7 @@ namespace CSGO_UI
         {
             foreach (var map in SelectedMode.MapGroups)
             {
-                if (map.Name == CSMaps.SelectionBoxItem.ToString())
+                if (map.ToString() == CSMaps.SelectionBoxItem.ToString())
                 {
                     GameSettings.SetMap(map.Name);
                 }
@@ -208,7 +208,7 @@ namespace CSGO_UI
         {
             foreach (var type in Modes.Games)
             {
-                if (type.Name == gameTypes.SelectionBoxItem.ToString())
+                if (type.ToString() == gameTypes.SelectionBoxItem.ToString())
                 {
                     SelectedType = type;
                     SetGameModesList();
@@ -221,7 +221,7 @@ namespace CSGO_UI
         {
             foreach (var mode in SelectedType.Modes)
             {
-                if (mode.Name == SelectedType.Modes[0].Name)
+                if (mode.ToString() == SelectedType.Modes[0].Name)
                 {
                     GameSettings.SetGamemode(mode.Name, SelectedType, Modes.Games.IndexOf(SelectedType));
                     SelectedMode = mode;

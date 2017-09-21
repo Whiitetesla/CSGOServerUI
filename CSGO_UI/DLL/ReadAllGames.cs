@@ -16,6 +16,8 @@ namespace CSGO_UI.DLL
         {
             string text = System.IO.File.ReadAllText(steamCdmPath + "\\steamapps\\common\\Counter-Strike Global Offensive Beta - Dedicated Server\\csgo\\gamemodes.txt");
             //string text = System.IO.File.ReadAllText(@"C:\Users\NHL\Source\Repos\CSGOServerUI\CSGO_UI\gamemodes.txt");
+            //string text = System.IO.File.ReadAllText(@"C:\Users\Niels Hviid Lund\Documents\GitHub\CSGOServerUI\CSGO_UI\gamemodes.txt");
+
             string replacement = Regex.Replace(text, @"\t|\n|\r| ", "");
 
             replacement.Trim();
