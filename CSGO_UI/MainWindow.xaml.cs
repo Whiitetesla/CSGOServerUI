@@ -136,7 +136,9 @@ namespace CSGO_UI
             {
                 if(new BLL.ServerComands().StartClient(GameSettings,SteamCdmPath))
                 {
-                    temp_out.Text = "server started";
+                    temp_out.Text = "Server started";
+                    temp_out.Text = "srcds -game csgo -console -usercon " + GameSettings.GetMaxplayersCode() +
+                GameSettings.GetGameMode() + GameSettings.GetMapCode();
                 }
                 else
                 {
@@ -147,7 +149,6 @@ namespace CSGO_UI
             {
                 temp_out.Text = "error when trying to start the server";
             }
-            temp_out.Text = GameSettings.GetMapCode();
         }
         //stops the server
         private void Button_Click_3(object sender, RoutedEventArgs e)
@@ -178,16 +179,22 @@ namespace CSGO_UI
                     GameSettings.SetMap(map.Name);
                 }
             }
+            temp_out.Text = "srcds -game csgo -console -usercon " + GameSettings.GetMaxplayersCode() +
+                GameSettings.GetGameMode() + GameSettings.GetMapCode();
         }
         //what will happen when gamemodes combobox loses focus
         private void gameModes_LostFocus(object sender, RoutedEventArgs e)
         {
             UpdateGameModeList();
+            temp_out.Text = "srcds -game csgo -console -usercon " + GameSettings.GetMaxplayersCode() +
+                GameSettings.GetGameMode() + GameSettings.GetMapCode();
         }
         //what will happen when gametypes combobox loses focus
         private void gameTypes_LostFocus(object sender, RoutedEventArgs e)
         {
             UpdateGameTypeList();
+            temp_out.Text = "srcds -game csgo -console -usercon " + GameSettings.GetMaxplayersCode() +
+                GameSettings.GetGameMode() + GameSettings.GetMapCode();
         }
         //method for updating the csgo server
         private void DoUpdate()
@@ -221,7 +228,7 @@ namespace CSGO_UI
         {
             foreach (var mode in SelectedType.Modes)
             {
-                if (mode.ToString() == SelectedType.Modes[0].Name)
+                if (mode.ToString() == gameModes.SelectionBoxItem.ToString())
                 {
                     GameSettings.SetGamemode(mode.Name, SelectedType, Modes.Games.IndexOf(SelectedType));
                     SelectedMode = mode;
