@@ -68,6 +68,7 @@
     <Compile Include="DLL\ReadAllGames.cs" />
     <Compile Include="DLL\StringEditor.cs" />
     <Compile Include="Entitys\GameMode.cs" />
+    <Compile Include="Entitys\GameNames.cs" />
     <Compile Include="Entitys\GameTypes.cs" />
     <Compile Include="Entitys\MapGroups.cs" />
     <Compile Include="Entitys\Modes.cs" />

@@ -64,6 +64,7 @@ namespace CSGO_UI.entitys
                     if(map.Name == value)
                     {
                         selectedMap = map;
+                        return true;
                     }
                 }
             }
@@ -83,10 +84,11 @@ namespace CSGO_UI.entitys
                 this.gameType = gameType;
                 foreach (var mode in game.Modes)
                 {
-                    if (mode.Name == value)
+                    if (mode.Name.GetGameName() == value)
                     {
                         selectedGame = mode;
                         gameMode = game.Modes.IndexOf(mode);
+                        return true;
                     }
                 }
             }

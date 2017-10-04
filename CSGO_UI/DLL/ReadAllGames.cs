@@ -106,7 +106,7 @@ namespace CSGO_UI.DLL
             gameMaps = GetGameModeMaps(modestring[0]);
             gameModes.Add(new Modes()
             {
-                Name = StringEditor.RemoveNONCharactor(modestring[0].Split(new string[] { "," }, StringSplitOptions.None)[2]),
+                Name = GameNames.GetAGameNames(StringEditor.RemoveNONCharactor(modestring[0].Split(new string[] { "," }, StringSplitOptions.None)[2])),
                 MaxPlayers = mPlayers[0],
                 MapGroups = gameMaps
             });
@@ -126,7 +126,7 @@ namespace CSGO_UI.DLL
 
                         gameModes.Add(new Modes()
                         {
-                            Name = temp,
+                            Name = GameNames.GetAGameNames(temp),
                             MaxPlayers = mPlayers[i],
                             MapGroups = gameMaps
                         });

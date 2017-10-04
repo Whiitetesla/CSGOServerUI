@@ -230,7 +230,7 @@ namespace CSGO_UI
             {
                 if (mode.ToString() == gameModes.SelectionBoxItem.ToString())
                 {
-                    GameSettings.SetGamemode(mode.Name, SelectedType, Modes.Games.IndexOf(SelectedType));
+                    GameSettings.SetGamemode(mode.Name.ToString(), SelectedType, Modes.Games.IndexOf(SelectedType));
                     SelectedMode = mode;
                     SetCSMapList();
                     if (SelectedMode.MapGroups.Count > 0)
