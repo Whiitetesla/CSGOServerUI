@@ -52,7 +52,12 @@ namespace CSGO_UI.entitys
 
         public string GetMapCode()
         {
-            return " +mapgroup "+selectedMap.Group+" +map " + selectedMap.Name;
+            if (selectedMap.Name != "")
+            {
+                return " +mapgroup "+selectedMap.Group+" +map " + selectedMap.Name;
+            }
+            return " +mapgroup " + selectedMap.Group;
+
         }
 
         public bool SetMap(string value)
