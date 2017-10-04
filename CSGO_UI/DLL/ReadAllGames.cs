@@ -170,6 +170,22 @@ namespace CSGO_UI.DLL
                             {
                                 tempMap += "2";
                             }
+                            switch (mainString.Split(new string[] { "," }, StringSplitOptions.None)[0])
+                            {
+                                case "gungameprogressive":
+                                    tempGroup = "mg_armsrace";
+                                    break;
+                                case "gungametrbomb":
+                                    tempGroup = "mg_demolition";
+                                    break;
+                                case "deathmatch":
+                                    tempGroup = "mg_deathmatch";
+                                    break;
+                                case "skirmish":
+                                    tempGroup = "mg_skirmish_triggerdiscipline";
+                                    break;
+
+                            }
                             gameMaps.Add(new MapGroups()
                             {
                                 Name = tempMap,
